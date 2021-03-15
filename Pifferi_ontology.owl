@@ -1,0 +1,738 @@
+@prefix : <http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives> .
+
+<http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives> rdf:type owl:Ontology .
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#collaborates
+:collaborates rdf:type owl:ObjectProperty ;
+              owl:inverseOf :collaborates ;
+              rdf:type owl:SymmetricProperty ;
+              rdfs:domain [ rdf:type owl:Class ;
+                            owl:unionOf ( :Narrator
+                                          :Publisher
+                                        )
+                          ] ;
+              rdfs:range [ rdf:type owl:Class ;
+                           owl:unionOf ( :Narrator
+                                         :Publisher
+                                       )
+                         ] ;
+              owl:propertyChainAxiom ( :creates
+                                       :isReportedIn
+                                       :hasPublisher
+                                     ) ;
+              rdfs:comment """if a narrator creates a narrative that is reported in a book that is published by a publisher, then the narrator collaborates with that publisher. 
+This object property links narrator to publisher."""@en ;
+              rdfs:label "collaborates"@en .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#compose
+:compose rdf:type owl:ObjectProperty ;
+         owl:inverseOf :isComposedOf ;
+         rdfs:domain :Event ;
+         rdfs:range :Narrative ;
+         rdfs:comment """An event composes a narrative. This property is not functional because, in my conceptualization, the same event can compose more narratives. 
+This object property links events to narrative(s)."""@en ;
+         rdfs:label "composes"@en .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#creates
+:creates rdf:type owl:ObjectProperty ;
+         owl:inverseOf :isCreatedBy ;
+         rdfs:domain :Narrator ;
+         rdfs:range :Narrative ;
+         rdfs:comment """One or more narrator create a narrative. It's reasonable to think that a narrator can create more than one narrative, so this property is not functional.
+This object property links narrator and narrative(s)."""@en ;
+         rdfs:label "creates"@en .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#hasCharacter
+:hasCharacter rdf:type owl:ObjectProperty ;
+              rdfs:subPropertyOf :hasParticipant ;
+              owl:inverseOf :isCharacterOf ;
+              rdfs:domain :Event ;
+              rdfs:range :Character ;
+              owl:propertyDisjointWith :hasObject ;
+              rdfs:comment "An event can have one or more characters as participants. This object property links event to character(s)."@en ;
+              rdfs:label "hasCharacter"@en .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#hasObject
+:hasObject rdf:type owl:ObjectProperty ;
+           rdfs:subPropertyOf :hasParticipant ;
+           owl:inverseOf :isObjectOf ;
+           rdfs:domain :Event ;
+           rdfs:range :Object ;
+           rdfs:comment "An event can have one or more objects as participants. This object property links event to object(s)."@en ;
+           rdfs:label "hasObject"@en .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#hasParticipant
+:hasParticipant rdf:type owl:ObjectProperty ;
+                owl:inverseOf :isParticipantOf ;
+                rdfs:domain :Event ;
+                rdfs:range :Participant ;
+                rdfs:comment """Each event has at least one participating character or object. 
+Since an event can have multiple participants, this property is not functional.
+This object property links event and partcipant(s)."""@en ;
+                rdfs:label "hasParticipant"@en .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#hasPublisher
+:hasPublisher rdf:type owl:ObjectProperty ;
+              owl:inverseOf :isPublisherOf ;
+              rdf:type owl:FunctionalProperty ;
+              rdfs:domain :Book ;
+              rdfs:range :Publisher ;
+              rdfs:comment """A book has exactly one publisher, so this property is functional. 
+This object property links book to publisher."""@en ;
+              rdfs:label "hasPublisher"@en .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#hosts
+:hosts rdf:type owl:ObjectProperty ;
+       owl:inverseOf :occursIn ;
+       rdf:type owl:InverseFunctionalProperty ;
+       rdfs:domain :Location ;
+       rdfs:range :Event ;
+       rdfs:comment "A location can host more than one event, but an event occurs in exactly one location. So this object property is inverse functional and links location and event(s)."@en ;
+       rdfs:label "hosts"@en .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#isCharacterOf
+:isCharacterOf rdf:type owl:ObjectProperty ;
+               rdfs:subPropertyOf :isParticipantOf ;
+               rdfs:domain :Character ;
+               rdfs:range :Event ;
+               owl:propertyDisjointWith :isObjectOf ;
+               rdfs:comment """A character can be the character of one ore more events.
+This object property links character to event(s)."""@en ;
+               rdfs:label "isCharacterOf"@en .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#isComposedOf
+:isComposedOf rdf:type owl:ObjectProperty ;
+              rdfs:domain :Narrative ;
+              rdfs:range :Event ;
+              rdfs:comment """A narrative is exclusively composed of one or more events.
+This object property links a narrative and event(s)."""@en ;
+              rdfs:label "isComposedOf"@en .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#isCreatedBy
+:isCreatedBy rdf:type owl:ObjectProperty ;
+             rdfs:domain :Narrative ;
+             rdfs:range :Narrator ;
+             rdfs:comment """Each narrative is created by at least one narrator. Since more than one narrator can create a narrative, this property is not functional.
+This object property links narrative and narrator(s)."""@en ;
+             rdfs:label "isCreatedBy"@en .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#isObjectOf
+:isObjectOf rdf:type owl:ObjectProperty ;
+            rdfs:subPropertyOf :isParticipantOf ;
+            rdfs:domain :Object ;
+            rdfs:range :Event ;
+            rdfs:comment """An object can be the object of one ore more events.
+This object property links object to event(s)."""@en ;
+            rdfs:label "isObjectOf"@en .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#isParticipantOf
+:isParticipantOf rdf:type owl:ObjectProperty ;
+                 rdfs:domain :Participant ;
+                 rdfs:range :Event ;
+                 rdfs:comment """A partecipant is the participant of one or more events.
+This object property links participant and event(s)."""@en ;
+                 rdfs:label "isParticipantOf"@en .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#isPublisherOf
+:isPublisherOf rdf:type owl:ObjectProperty ,
+                        owl:InverseFunctionalProperty ;
+               rdfs:domain :Publisher ;
+               rdfs:range :Book ;
+               rdfs:comment """A publisher is the publisher of one or more books (so this property is not functional). But a book can only have a publisher, so this property is inverse functional.
+This object property links publisher to book(s)."""@en ;
+               rdfs:label "isPublisherOf"@en .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#isReportedIn
+:isReportedIn rdf:type owl:ObjectProperty ;
+              owl:inverseOf :reports ;
+              rdfs:domain :Narrative ;
+              rdfs:range :Book ;
+              rdfs:comment """It's reasonable to think that a narrative is reported in one or more books.
+This object property links narrative and book(s)."""@en ;
+              rdfs:label "isReportedIn"@en .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#occursIn
+:occursIn rdf:type owl:ObjectProperty ,
+                   owl:FunctionalProperty ;
+          rdfs:domain :Event ;
+          rdfs:range :Location ;
+          rdfs:comment """An event occurs in exactly one location, so this property is functional. 
+This object property links event and location."""@en ;
+          rdfs:label "occursIn"@en .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#reports
+:reports rdf:type owl:ObjectProperty ;
+         rdfs:domain :Book ;
+         rdfs:range :Narrative ;
+         rdfs:comment """A book reports one or more narratives.
+This object property links book and narrative(s)."""@en ;
+         rdfs:label "reports"@en .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#hasBeginning
+:hasBeginning rdf:type owl:DatatypeProperty ,
+                       owl:FunctionalProperty ;
+              rdfs:domain :Event ;
+              rdfs:range xsd:dateTime ;
+              rdfs:comment "An event has exactly one beginning, represented as a datetime using the appropriate XSD datatype."@en ;
+              rdfs:label "hasBeginning"@en .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#hasCharacterName
+:hasCharacterName rdf:type owl:DatatypeProperty ;
+                  rdfs:subPropertyOf :hasName ;
+                  rdfs:domain :Character ;
+                  rdfs:range xsd:string ;
+                  rdfs:comment "A character can have one or more names, represented as strings."@en ;
+                  rdfs:label "hasCharacterName"@en .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#hasEnding
+:hasEnding rdf:type owl:DatatypeProperty ,
+                    owl:FunctionalProperty ;
+           rdfs:domain :Event ;
+           rdfs:range xsd:dateTime ;
+           rdfs:comment "An event has exactly one ending, represented as a datetime using the appropriate XSD datatype."@en ;
+           rdfs:label "hasEnding"@en .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#hasISBNcode
+:hasISBNcode rdf:type owl:DatatypeProperty ,
+                      owl:FunctionalProperty ;
+             rdfs:domain :Book ;
+             rdfs:range xsd:string ;
+             rdfs:comment "A book is identified by an ISBN code, represented as a string. A book can have only one ISBN, so this data property is functional."@en ;
+             rdfs:label "hasISBNcode"@en .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#hasLocationName
+:hasLocationName rdf:type owl:DatatypeProperty ;
+                 rdfs:subPropertyOf :hasName ;
+                 rdfs:domain :Location ;
+                 rdfs:range xsd:string ;
+                 rdfs:comment "A location can have one or more names, represented as strings."@en ;
+                 rdfs:label "hasLocationName"@en .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#hasName
+:hasName rdf:type owl:DatatypeProperty ;
+         rdfs:range xsd:string ;
+         rdfs:comment "A resource can have one or more names, represented as strings."@en ;
+         rdfs:label "hasName"@en .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#hasTitle
+:hasTitle rdf:type owl:DatatypeProperty ;
+          rdfs:domain :Book ;
+          rdfs:range xsd:string ;
+          rdfs:comment "A book has one or more title. This data property links book to one or more strings."@en ;
+          rdfs:label "hasTitle"@en .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#Book
+:Book rdf:type owl:Class ;
+      rdfs:subClassOf [ rdf:type owl:Restriction ;
+                        owl:onProperty :reports ;
+                        owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                        owl:onClass :Narrative
+                      ] ,
+                      [ rdf:type owl:Restriction ;
+                        owl:onProperty :hasPublisher ;
+                        owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                        owl:onClass :Publisher
+                      ] ,
+                      [ rdf:type owl:Restriction ;
+                        owl:onProperty :hasTitle ;
+                        owl:someValuesFrom xsd:string
+                      ] ,
+                      [ rdf:type owl:Restriction ;
+                        owl:onProperty :hasISBNcode ;
+                        owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                        owl:onDataRange xsd:string
+                      ] ;
+      rdfs:comment "A book is a resource that reports one or more narratives. It also has a title and it is identified by an ISBN code. Furthermore, it has exactly one publisher."@en ;
+      rdfs:label "Book"@en .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#Character
+:Character rdf:type owl:Class ;
+           rdfs:subClassOf :Participant ,
+                           [ rdf:type owl:Restriction ;
+                             owl:onProperty :hasCharacterName ;
+                             owl:someValuesFrom xsd:string
+                           ] ;
+           owl:disjointWith :Object ;
+           owl:disjointUnionOf ( :Human
+                                 :NotHuman
+                               ) ;
+           rdfs:comment "A resource that can participate to an event and has a name. Furthermore a character can be human or not human."@en ;
+           rdfs:label "Character"@en .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#Event
+:Event rdf:type owl:Class ;
+       rdfs:subClassOf [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasParticipant ;
+                         owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                         owl:onClass :Participant
+                       ] ,
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :occursIn ;
+                         owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                         owl:onClass :Location
+                       ] ,
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasBeginning ;
+                         owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                         owl:onDataRange xsd:dateTime
+                       ] ,
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasEnding ;
+                         owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                         owl:onDataRange xsd:dateTime
+                       ] ;
+       rdfs:comment "One or more events compose a narrative and each event occurs in exactly one location and has exactly one beginning and one ending. Furthermore each event has at least one participating character or object."@en ;
+       rdfs:label "Event"@en .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#FictionalLocation
+:FictionalLocation rdf:type owl:Class ;
+                   rdfs:subClassOf :Location ;
+                   owl:disjointWith :RealLocation ;
+                   rdfs:comment "A specific type of location that is fictional."@en ;
+                   rdfs:label "FictionalLocation"@en .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#Human
+:Human rdf:type owl:Class ;
+       rdfs:subClassOf :Character ;
+       owl:disjointWith :NotHuman ;
+       rdfs:comment "A specific type of character that is human."@en ;
+       rdfs:label "HumanCharacter"@en .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#Location
+:Location rdf:type owl:Class ;
+          rdfs:subClassOf [ rdf:type owl:Restriction ;
+                            owl:onProperty :hasLocationName ;
+                            owl:someValuesFrom xsd:string
+                          ] ;
+          owl:disjointUnionOf ( :FictionalLocation
+                                :RealLocation
+                              ) ;
+          rdfs:comment "A location hosts one or more events. Each location has a name and can be a real location or a fictional location."@en ;
+          rdfs:label "Location"@en .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#Narrative
+:Narrative rdf:type owl:Class ;
+           rdfs:subClassOf [ rdf:type owl:Restriction ;
+                             owl:onProperty :isComposedOf ;
+                             owl:allValuesFrom :Event
+                           ] ,
+                           [ rdf:type owl:Restriction ;
+                             owl:onProperty :isComposedOf ;
+                             owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                             owl:onClass :Event
+                           ] ,
+                           [ rdf:type owl:Restriction ;
+                             owl:onProperty :isCreatedBy ;
+                             owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                             owl:onClass :Narrator
+                           ] ;
+           rdfs:comment "A narrative is exclusively composed of one or more events. Each narrative is created by at least one narrator and is reported in a book."@en ;
+           rdfs:label "Narrative"@en .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#Narrator
+:Narrator rdf:type owl:Class ;
+          rdfs:comment "A narrator is the creator of a narrative."@en ;
+          rdfs:label "Narrator"@en .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#NotHuman
+:NotHuman rdf:type owl:Class ;
+          rdfs:subClassOf :Character ;
+          rdfs:comment "A specific type of character that is not human."@en ;
+          rdfs:label "NotHumanCharacter"@en .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#Object
+:Object rdf:type owl:Class ;
+        rdfs:subClassOf :Participant ;
+        rdfs:comment "A resource that can participate to an event."@en ;
+        rdfs:label "Object"@en .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#Organisation
+:Organisation rdf:type owl:Class ;
+              rdfs:comment "An organized group of people (such as publishers) with a particular purpose."@en ;
+              rdfs:label "Organisation"@en .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#Participant
+:Participant rdf:type owl:Class ;
+             owl:disjointUnionOf ( :Character
+                                   :Object
+                                 ) ;
+             rdfs:comment "A resource who participate to an event and that can be a character or a object."@en ;
+             rdfs:label "Participant"@en .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#Publisher
+:Publisher rdf:type owl:Class ;
+           rdfs:subClassOf :Organisation ;
+           rdfs:comment "A resource responsible for publishing a book."@en ;
+           rdfs:label "Publisher"@en .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#RealLocation
+:RealLocation rdf:type owl:Class ;
+              rdfs:subClassOf :Location ;
+              rdfs:comment "A specific type of location that is real."@en ;
+              rdfs:label "RealLocation"@en .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#book1
+:book1 rdf:type owl:NamedIndividual ,
+                :Book ;
+       :hasPublisher :publisher1 ;
+       :reports :narrative1 ,
+                :narrative3 ;
+       :hasISBNcode "978-3-16-148410-0"^^xsd:string ;
+       :hasTitle "Titolo1"^^xsd:string .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#book2
+:book2 rdf:type owl:NamedIndividual ,
+                :Book ;
+       :hasPublisher :publisher2 ;
+       :reports :narrative2 ,
+                :narrative3 ;
+       :hasISBNcode "978-88-17-07926-6"^^xsd:string ;
+       :hasTitle "Titolo2"^^xsd:string .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#event1
+:event1 rdf:type owl:NamedIndividual ,
+                 :Event ;
+        :compose :narrative1 ;
+        :hasParticipant :participant1 ,
+                        :participant2 ;
+        :occursIn :fictionalLocation1 ;
+        :hasBeginning "2016-01-01T00:00:00"^^xsd:dateTime ;
+        :hasEnding "2017-02-01T00:00:00"^^xsd:dateTime .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#event2
+:event2 rdf:type owl:NamedIndividual ,
+                 :Event ;
+        :compose :narrative2 ;
+        :hasParticipant :participant3 ,
+                        :participant4 ;
+        :occursIn :fictionalLocation1 ;
+        :hasBeginning "2018-02-01T00:00:00"^^xsd:dateTime ;
+        :hasEnding "2019-02-01T00:00:00"^^xsd:dateTime .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#event3
+:event3 rdf:type owl:NamedIndividual ,
+                 :Event ;
+        :hasCharacter :participant6 ;
+        :hasObject :participant5 ;
+        :occursIn :realLocation1 ;
+        :hasBeginning "2017-03-01T00:00:00"^^xsd:dateTime ;
+        :hasEnding "2017-05-01T00:00:00"^^xsd:dateTime .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#event4
+:event4 rdf:type owl:NamedIndividual ,
+                 :Event ;
+        :hasCharacter :participant7 ,
+                      :participant8 ;
+        :occursIn :realLocation1 ;
+        :hasBeginning "2018-02-01T00:00:00"^^xsd:dateTime ;
+        :hasEnding "2018-05-01T00:00:00"^^xsd:dateTime .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#event5
+:event5 rdf:type owl:NamedIndividual ,
+                 :Event ;
+        :hasCharacter :participant3 ,
+                      :participant4 ;
+        :occursIn :fictionalLocation2 ;
+        :hasBeginning "2018-01-01T00:00:00"^^xsd:dateTime ;
+        :hasEnding "2020-01-08T00:00:00"^^xsd:dateTime .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#event6
+:event6 rdf:type owl:NamedIndividual ,
+                 :Event ;
+        :hasCharacter :participant3 ;
+        :hasObject :participant2 ;
+        :occursIn :realLocation2 ;
+        :hasBeginning "2017-07-01T00:00:00"^^xsd:dateTime ;
+        :hasEnding "2017-08-01T00:00:00"^^xsd:dateTime .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#fictionalLocation1
+:fictionalLocation1 rdf:type owl:NamedIndividual ,
+                             :FictionalLocation ;
+                    :hosts :event1 ,
+                           :event2 ;
+                    :hasLocationName "Narnia"^^xsd:string .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#fictionalLocation2
+:fictionalLocation2 rdf:type owl:NamedIndividual ,
+                             :FictionalLocation ;
+                    :hasLocationName "Lilliput"^^xsd:string .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#narrative1
+:narrative1 rdf:type owl:NamedIndividual ,
+                     :Narrative ;
+            :isComposedOf :event1 ,
+                          :event3 ;
+            :isCreatedBy :narrator1 ,
+                         :narrator2 ;
+            :isReportedIn :book1 .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#narrative2
+:narrative2 rdf:type owl:NamedIndividual ,
+                     :Narrative ;
+            :isComposedOf :event2 ,
+                          :event4 ;
+            :isCreatedBy :narrator2 ,
+                         :narrator3 ;
+            :isReportedIn :book2 .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#narrative3
+:narrative3 rdf:type owl:NamedIndividual ,
+                     :Narrative ;
+            :isComposedOf :event5 ,
+                          :event6 ;
+            :isCreatedBy :narrator1 ,
+                         :narrator3 ;
+            :isReportedIn :book1 ,
+                          :book2 .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#narrator1
+:narrator1 rdf:type owl:NamedIndividual ,
+                    :Narrator ;
+           :collaborates :publisher1 ;
+           :creates :narrative1 .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#narrator2
+:narrator2 rdf:type owl:NamedIndividual ,
+                    :Narrator ;
+           :creates :narrative1 .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#narrator3
+:narrator3 rdf:type owl:NamedIndividual ,
+                    :Narrator .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#participant1
+:participant1 rdf:type owl:NamedIndividual ,
+                       :Human ;
+              :isCharacterOf :event1 ;
+              :hasCharacterName "Luigi"^^xsd:string .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#participant2
+:participant2 rdf:type owl:NamedIndividual ,
+                       :Object ;
+              :isObjectOf :event1 .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#participant3
+:participant3 rdf:type owl:NamedIndividual ,
+                       :NotHuman ;
+              :isCharacterOf :event2 ;
+              :hasCharacterName "Pluto"^^xsd:string .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#participant4
+:participant4 rdf:type owl:NamedIndividual ,
+                       :NotHuman ;
+              :isCharacterOf :event2 ;
+              :hasCharacterName "Paperino"^^xsd:string .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#participant5
+:participant5 rdf:type owl:NamedIndividual ,
+                       :Object .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#participant6
+:participant6 rdf:type owl:NamedIndividual ,
+                       :NotHuman ;
+              :hasCharacterName "Topolino"^^xsd:string .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#participant7
+:participant7 rdf:type owl:NamedIndividual ,
+                       :Human ;
+              :hasCharacterName "Maria"^^xsd:string .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#participant8
+:participant8 rdf:type owl:NamedIndividual ,
+                       :Human ;
+              :isParticipantOf :event4 ;
+              :hasCharacterName "Giuseppe"^^xsd:string .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#publisher1
+:publisher1 rdf:type owl:NamedIndividual ,
+                     :Publisher ;
+            :isPublisherOf :book1 .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#publisher2
+:publisher2 rdf:type owl:NamedIndividual ,
+                     :Publisher ;
+            :isPublisherOf :book2 .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#realLocation1
+:realLocation1 rdf:type owl:NamedIndividual ,
+                        :RealLocation ;
+               :hasLocationName "Pisa"^^xsd:string .
+
+
+###  http://www.semanticweb.org/luciapifferi/ontologies/2020/semantic_web_exam/narratives#realLocation2
+:realLocation2 rdf:type owl:NamedIndividual ,
+                        :RealLocation ;
+               :hasLocationName "Lucca"^^xsd:string .
+
+
+#################################################################
+#    General axioms
+#################################################################
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( :Book
+                :Event
+                :Location
+                :Narrative
+                :Narrator
+                :Organisation
+                :Participant
+              )
+] .
+
+
+[ rdf:type owl:AllDifferent ;
+  owl:distinctMembers ( :book1
+                        :book2
+                      )
+] .
+
+
+[ rdf:type owl:AllDifferent ;
+  owl:distinctMembers ( :event1
+                        :event2
+                        :event3
+                        :event4
+                        :event5
+                        :event6
+                      )
+] .
+
+
+[ rdf:type owl:AllDifferent ;
+  owl:distinctMembers ( :fictionalLocation1
+                        :fictionalLocation2
+                      )
+] .
+
+
+[ rdf:type owl:AllDifferent ;
+  owl:distinctMembers ( :narrative1
+                        :narrative2
+                        :narrative3
+                      )
+] .
+
+
+[ rdf:type owl:AllDifferent ;
+  owl:distinctMembers ( :narrator1
+                        :narrator2
+                        :narrator3
+                      )
+] .
+
+
+[ rdf:type owl:AllDifferent ;
+  owl:distinctMembers ( :participant1
+                        :participant2
+                        :participant3
+                        :participant4
+                        :participant5
+                        :participant6
+                        :participant7
+                        :participant8
+                      )
+] .
+
+
+[ rdf:type owl:AllDifferent ;
+  owl:distinctMembers ( :publisher1
+                        :publisher2
+                      )
+] .
+
+
+[ rdf:type owl:AllDifferent ;
+  owl:distinctMembers ( :realLocation1
+                        :realLocation2
+                      )
+] .
+
+
+###  Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi
